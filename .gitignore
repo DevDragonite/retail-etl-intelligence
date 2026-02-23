@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+.ipynb_checkpoints/
+qa_step0.py
+qa_step1.py
+generate_notebook.py
