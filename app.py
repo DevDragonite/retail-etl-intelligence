@@ -54,6 +54,14 @@ def apply_custom_css():
             box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07) !important;
             padding: 1.5rem !important;
             transition: all 0.3s ease;
+            box-sizing: border-box !important;
+            overflow: hidden !important;
+        }}
+        
+        [data-testid="stPlotlyChart"] iframe {{
+            /* Ensure the iframe itself doesn't cause overflow */
+            max-width: 100% !important;
+            max-height: 100% !important;
         }}
         
         [data-testid="stMetric"]:hover {{
