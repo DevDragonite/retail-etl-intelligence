@@ -21,84 +21,87 @@ if "lang" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state.page = "Bienvenida"
 
-# --- CSS STYLING (LIQUID GLASS MINIMALISTA) ---
+# --- CSS STYLING (PREMIUM LIQUID GLASS) ---
 def apply_custom_css():
     st.markdown(f"""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        /* App Background - subtle gradient for glassmorphism */
+        /* App Background - elegant soft gradient */
         .stApp {{
-            background: linear-gradient(135deg, #f6f8fb 0%, #e5ebf4 100%);
+            background: linear-gradient(135deg, #e0e7f1 0%, #f4f6fa 100%);
             font-family: 'Inter', sans-serif;
         }}
         
         /* Typography */
         html, body, [class*="css"] {{
-            color: {COLORS['TEXT']};
+            color: #1a202c !important; 
             font-family: 'Inter', sans-serif;
         }}
         h1, h2, h3, h4, h5, h6 {{
-            color: {COLORS['PRIMARY']} !important;
-            font-weight: 600;
+            color: #0f172a !important;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }}
         
         /* Liquid Glass Containers for Metrics and general containers */
         [data-testid="stMetric"], .st-emotion-cache-12oz5g7, .st-emotion-cache-1r6slb0, .css-1r6slb0 {{
-            background: rgba(255, 255, 255, 0.55) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border-radius: 16px !important;
-            border: 1px solid rgba(255, 255, 255, 0.8) !important;
-            box-shadow: 0 4px 20px rgba(31, 38, 135, 0.05) !important;
-            padding: 1.2rem 1.5rem !important;
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07) !important;
+            padding: 1.5rem !important;
             transition: all 0.3s ease;
         }}
         
         [data-testid="stMetric"]:hover {{
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(31, 38, 135, 0.08) !important;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.12) !important;
+            border: 1px solid rgba(255, 255, 255, 1) !important;
         }}
         
         /* Metric Typography */
         [data-testid="stMetricValue"] {{
-            font-size: 2.2rem !important;
-            font-weight: 700 !important;
-            background: -webkit-linear-gradient(45deg, {COLORS['PRIMARY']}, {COLORS['SECONDARY']});
+            font-size: 2.4rem !important;
+            font-weight: 800 !important;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }}
         [data-testid="stMetricLabel"] {{
-            font-size: 1rem !important;
-            color: #666 !important;
-            font-weight: 500 !important;
+            font-size: 0.95rem !important;
+            color: #475569 !important;
+            font-weight: 600 !important;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
         }}
         
         /* Tabs styling - Pill shape */
         .stTabs [data-baseweb="tab-list"] {{
             gap: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 5px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }}
         .stTabs [data-baseweb="tab"] {{
-            height: 40px;
+            height: 42px;
             background: transparent;
-            border-radius: 10px;
-            padding: 8px 20px;
-            font-weight: 500;
-            color: #555;
+            border-radius: 12px;
+            padding: 8px 24px;
+            font-weight: 600;
+            color: #64748b;
             border: none !important;
+            transition: all 0.2s ease;
         }}
         .stTabs [aria-selected="true"] {{
-            background: rgba(255, 255, 255, 0.9) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
-            color: {COLORS['PRIMARY']} !important;
-            font-weight: 600;
+            background: rgba(255, 255, 255, 1) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+            color: #1e40af !important;
         }}
         .stTabs [data-baseweb="tab-highlight"] {{
             display: none;
@@ -106,38 +109,50 @@ def apply_custom_css():
         
         /* Welcome Storytelling elements */
         .welcome-card {{
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3.5rem;
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 15px 50px rgba(15, 23, 42, 0.06);
             margin-bottom: 2rem;
         }}
         .welcome-pillar {{
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
             border-radius: 16px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            border-left: 4px solid {COLORS['ACCENT']};
-            transition: transform 0.2s ease;
+            padding: 1.8rem;
+            margin: 1.2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+            border-left: 5px solid #3b82f6;
+            transition: all 0.3s ease;
+        }}
+        .welcome-pillar * {{
+            color: #1e293b !important;
         }}
         .welcome-pillar:hover {{
-            transform: translateX(5px);
-            background: rgba(255, 255, 255, 0.6);
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+        }}
+        .welcome-text {{
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #334155;
         }}
         
         .stButton>button {{
             border-radius: 12px;
             font-weight: 600;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: white;
+            color: #1e293b;
         }}
         
         hr {{
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            margin: 2rem 0;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            margin: 2.5rem 0;
         }}
         </style>
     """, unsafe_allow_html=True)
@@ -179,7 +194,6 @@ us_state_to_abbrev = {
 # --- HEADER & LANGUAGE HAMBURGER MENU ---
 col_logo, col_space, col_lang = st.columns([1, 6, 1])
 with col_lang:
-    # We use a popover for the hamburger menu look "inside the dashboard"
     with st.popover("🌐 Idioma"):
         for lang_option in LANGS.keys():
             if st.button(lang_option, use_container_width=True):
@@ -192,8 +206,19 @@ t = LANGS[st.session_state.lang]
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/3121/3121693.png", width=80) 
 st.sidebar.markdown(f"### {t['sidebar_title']}")
 
-# Navigation
-st.session_state.page = st.sidebar.radio("Navegación", [t["nav_welcome"], t["nav_dashboard"]], index=0 if st.session_state.page == "Bienvenida" or st.session_state.page == t["nav_welcome"] else 1)
+# Navigation Logic fixed for state persistence mapping
+nav_options = [t["nav_welcome"], t["nav_dashboard"]]
+
+# Check if current st.session_state.page is a valid option in current language, if not reset to welcome
+if st.session_state.page not in nav_options:
+    # Si cambió el idioma, el string anterior no estará en nav_options. Rescatamos el índice lógicamente:
+    # Asumimos que si estaba en Dashboard, el string contenía "Dashboard"
+    if "Dashboard" in st.session_state.page:
+        st.session_state.page = t["nav_dashboard"]
+    else:
+        st.session_state.page = t["nav_welcome"]
+
+st.session_state.page = st.sidebar.radio("Navegación", nav_options, index=nav_options.index(st.session_state.page))
 is_dashboard = st.session_state.page == t["nav_dashboard"]
 
 # Filters only applied if in Dashboard
@@ -203,7 +228,7 @@ if is_dashboard:
     st.sidebar.markdown("---")
     st.sidebar.subheader(t["global_filters"])
 
-    # Year Filters (Reverted from exact dates)
+    # Year Filters
     min_year = int(df_master['year'].min())
     max_year = int(df_master['year'].max())
     selected_years = st.sidebar.slider(t["year_range"], min_year, max_year, (min_year, max_year))
@@ -242,36 +267,40 @@ st.sidebar.markdown(f"*{t['developed_by']}*")
 
 if st.session_state.page == t["nav_welcome"]:
     # ---------------- STORYTELLING WELCOME SECTION ----------------
+    # Notice we replace markdown bold ** with proper HTML <strong> inside the HTML string 
+    # so Streamlit rendering doesn't choke on it.
     st.markdown(f"""
     <div class="welcome-card">
-        <h1 style="font-size: 3rem; margin-bottom: 0.5rem; text-align: center;">{t["hero_title"]}</h1>
-        <p style="text-align: center; font-size: 1.2rem; color: #555; margin-bottom: 2rem;">
+        <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center;">{t["hero_title"]}</h1>
+        <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500;">
             <em>{t['welcome_title']}</em>
         </p>
-        <p style="font-size: 1.1rem; line-height: 1.8;">{t['welcome_story_1']}</p>
-        <p style="font-size: 1.1rem; line-height: 1.8;">{t['welcome_story_2']}</p>
+        <p class="welcome-text">{t['welcome_story_1']}</p>
+        <p class="welcome-text">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
         
         <div class="welcome-pillar">
-            <h4>{t['welcome_pillar_1_title']}</h4>
-            <p style="margin:0; color:#444;">{t['welcome_pillar_1_desc']}</p>
+            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_1_title']}</h4>
+            <p style="margin:0;">{t['welcome_pillar_1_desc']}</p>
         </div>
         <div class="welcome-pillar">
-            <h4>{t['welcome_pillar_2_title']}</h4>
-            <p style="margin:0; color:#444;">{t['welcome_pillar_2_desc']}</p>
+            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_2_title']}</h4>
+            <p style="margin:0;">{t['welcome_pillar_2_desc']}</p>
         </div>
         <div class="welcome-pillar">
-            <h4>{t['welcome_pillar_3_title']}</h4>
-            <p style="margin:0; color:#444;">{t['welcome_pillar_3_desc']}</p>
+            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_3_title']}</h4>
+            <p style="margin:0;">{t['welcome_pillar_3_desc']}</p>
         </div>
         
         <br>
-        <div style="text-align: center;">
-            <p style="font-weight: 600; font-size: 1.1rem;">{t['welcome_cta']}</p>
+        <div style="text-align: center; margin-top: 1rem;">
+            <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
+                {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+            </p>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<p style='text-align: center;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; margin-top: 2rem;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)
 
 
 elif st.session_state.page == t["nav_dashboard"]:
