@@ -431,8 +431,11 @@ elif st.session_state.page == t["nav_dashboard"]:
             choices = [COLORS["SUCCESS"], COLORS["WARNING"], COLORS["DANGER"]]
             region_profit['color'] = np.select(conditions, choices, default=COLORS["TEXT_MUTED"])
             
+            # Translate region names for display
+            region_profit['display_region'] = region_profit['region'].apply(tf_region)
+            
             fig_region = go.Figure(data=[go.Bar(
-                x=region_profit['region'], y=region_profit['sales'], marker_color=region_profit['color'],
+                x=region_profit['display_region'], y=region_profit['sales'], marker_color=region_profit['color'],
                 text=region_profit['sales'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
             )])
             fig_region.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside")
@@ -446,8 +449,10 @@ elif st.session_state.page == t["nav_dashboard"]:
             st.plotly_chart(fig_region, use_container_width=True)
             
         with col1_2:
+            display_df = df_filtered.copy()
+            display_df['category'] = display_df['category'].apply(tf_category)
             fig_tree = px.treemap(
-                df_filtered, path=['category', 'sub_category'], values='sales', title=t["sales_category_title"],
+                display_df, path=['category', 'sub_category'], values='sales', title=t["sales_category_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"]]
             )
             fig_tree.update_layout(
@@ -475,8 +480,10 @@ elif st.session_state.page == t["nav_dashboard"]:
             st.plotly_chart(fig_heat, use_container_width=True)
             
         with col2_2:
+            display_df = df_filtered.copy()
+            display_df['category'] = display_df['category'].apply(tf_category)
             fig_scatter = px.scatter(
-                df_filtered, x='discount', y='profit_margin', color='category', trendline='ols', title=t["profit_scatter_title"],
+                display_df, x='discount', y='profit_margin', color='category', trendline='ols', title=t["profit_scatter_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"]], opacity=0.6
             )
             fig_scatter.update_layout(
@@ -510,8 +517,14 @@ elif st.session_state.page == t["nav_dashboard"]:
         st.subheader(t["tab_ops"])
         col3_1, col3_2 = st.columns(2)
         with col3_1:
+            def tf_ship(s):
+                if st.session_state.lang == "Español": return {"Standard Class": "Estándar", "Second Class": "Segunda Clase", "First Class": "Primera Clase", "Same Day": "Mismo Día"}.get(s, s)
+                if st.session_state.lang == "Português": return {"Standard Class": "Padrão", "Second Class": "Segunda Classe", "First Class": "Primeira Classe", "Same Day": "Mesmo Dia"}.get(s, s)
+                return s
+            display_df = df_filtered.copy()
+            display_df['ship_mode'] = display_df['ship_mode'].apply(tf_ship)
             fig_box = px.box(
-                df_filtered, x='ship_mode', y='days_to_ship', color='ship_mode', title=t["ops_box_title"],
+                display_df, x='ship_mode', y='days_to_ship', color='ship_mode', title=t["ops_box_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"], COLORS["WARNING"]]
             )
             fig_box.update_layout(
