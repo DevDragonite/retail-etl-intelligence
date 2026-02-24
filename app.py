@@ -271,7 +271,7 @@ if st.session_state.page == t["nav_welcome"]:
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<center>![TechStack](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![Pandas](https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white) ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white) ![Plotly](https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)</center>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)
 
 
 elif st.session_state.page == t["nav_dashboard"]:
