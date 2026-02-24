@@ -55,7 +55,6 @@ def apply_custom_css():
             padding: 1.5rem !important;
             transition: all 0.3s ease;
             box-sizing: border-box !important;
-            overflow: hidden !important;
         }}
         
         [data-testid="stPlotlyChart"] iframe {{
@@ -124,7 +123,6 @@ def apply_custom_css():
             border: 1px solid rgba(255, 255, 255, 1);
             box-shadow: 0 15px 50px rgba(15, 23, 42, 0.06);
             margin-bottom: 2rem;
-            overflow: hidden;
         }}
         .welcome-pillar {{
             background: rgba(255, 255, 255, 0.5);
@@ -260,39 +258,38 @@ st.sidebar.markdown(f"*{t['developed_by']}*")
 
 if st.session_state.page == t["nav_welcome"]:
     # ---------------- STORYTELLING WELCOME SECTION ----------------
-    import streamlit.components.v1 as components
     
-    welcome_html_block = f"""
-    {custom_css}
-    <div class="welcome-card" style="margin: 0; padding: 2.5rem;">
-        <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center; color: #0f172a; font-family: 'Inter', sans-serif;">{t["hero_title"]}</h1>
-        <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500; font-family: 'Inter', sans-serif;">
-            <em>{t['welcome_title']}</em>
-        </p>
-        <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_1']}</p>
-        <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
-        
-        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_1_title']}</h4>
-            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_1_desc']}</p>
-        </div>
-        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_2_title']}</h4>
-            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_2_desc']}</p>
-        </div>
-        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_3_title']}</h4>
-            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_3_desc']}</p>
-        </div>
-        
-        <div style="text-align: center; margin-top: 2rem; font-family: 'Inter', sans-serif;">
-            <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
-                {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
-            </p>
-        </div>
+    # We use st.markdown with standard string manipulation and strict no-indentation
+    # to prevent Streamlit from wrapping inner elements as markdown code blocks.
+    st.markdown(f"""
+<div class="welcome-card" style="margin: 0; padding: 2.5rem;">
+    <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center; color: #0f172a; font-family: 'Inter', sans-serif;">{t["hero_title"]}</h1>
+    <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500; font-family: 'Inter', sans-serif;">
+        <em>{t['welcome_title']}</em>
+    </p>
+    <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_1']}</p>
+    <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
+    
+    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_1_title']}</h4>
+        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_1_desc']}</p>
     </div>
-    """
-    st.components.v1.html(welcome_html_block, height=900, scrolling=True)
+    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_2_title']}</h4>
+        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_2_desc']}</p>
+    </div>
+    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_3_title']}</h4>
+        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_3_desc']}</p>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem; font-family: 'Inter', sans-serif;">
+        <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
+            {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+        </p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
     
     st.markdown("<p style='text-align: center; margin-top: 2rem;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)
 
