@@ -215,10 +215,13 @@ us_state_to_abbrev = {
 # --- HEADER & LANGUAGE HAMBURGER MENU ---
 col_logo, col_space, col_lang = st.columns([1, 6, 1])
 with col_lang:
-    with st.popover(f"🌐 {st.session_state.lang}"):
+    flags = {"Español": "🇻🇪", "English": "🇺🇸", "Português": "🇧🇷"}
+    current_flag = flags.get(st.session_state.lang, "🌐")
+    with st.popover(f"{current_flag} {st.session_state.lang}"):
         for lang_option in LANGS.keys():
             if lang_option != st.session_state.lang:
-                if st.button(lang_option, use_container_width=True):
+                opt_flag = flags.get(lang_option, "🌐")
+                if st.button(f"{opt_flag} {lang_option}", use_container_width=True):
                     st.session_state.lang = lang_option
                     st.rerun()
 
@@ -518,6 +521,17 @@ elif st.session_state.page == t["nav_dashboard"]:
         render_finding('conc_f1_title', 'conc_f1_finding', 'conc_f1_impact', 'conc_f1_action', 'conc_f1_prediction')
         render_finding('conc_f2_title', 'conc_f2_finding', 'conc_f2_impact', 'conc_f2_action', 'conc_f2_prediction')
         render_finding('conc_f3_title', 'conc_f3_finding', 'conc_f3_impact', 'conc_f3_action', 'conc_f3_prediction')
+        
+        # Footer in Conclusions
+        footer_labels = {
+            "Español": "Desarrollado por Hely Camargo utilizando:",
+            "English": "Developed by Hely Camargo using:",
+            "Português": "Desenvolvido por Hely Camargo utilizando:"
+        }
+        f_text = footer_labels.get(st.session_state.lang, footer_labels["Español"])
+        techs = "Python, Pandas, Plotly Express & Streamlit"
+        
+        st.markdown(f"<div style='text-align: right; margin-top: 2rem;'><span style='color: black; font-weight: bold;'>{f_text} {techs}</span></div>", unsafe_allow_html=True)
 
     # Tabs Array
     tab1, tab2, tab3, tab4 = st.tabs([t["tab_sales"], t["tab_profit"], t["tab_ops"], t["tab_conclusions"]])
