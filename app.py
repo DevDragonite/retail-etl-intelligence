@@ -233,7 +233,7 @@ with col_lang:
     inner_css = ""
     for idx, lang_opt in enumerate(other_langs, start=1):
         inner_css += f"""
-        div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type({idx}) button p::before {{
+        div[data-testid="stPopoverBody"] div[data-testid="stElementContainer"]:nth-child({idx}) button p::before {{
             content: ""; display: inline-block; width: 18px; height: 13px;
             background-image: url('{flag_urls[lang_opt]}'); background-size: cover; 
             margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
