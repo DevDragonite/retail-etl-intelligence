@@ -124,6 +124,7 @@ def apply_custom_css():
             border: 1px solid rgba(255, 255, 255, 1);
             box-shadow: 0 15px 50px rgba(15, 23, 42, 0.06);
             margin-bottom: 2rem;
+            overflow: hidden;
         }}
         .welcome-pillar {{
             background: rgba(255, 255, 255, 0.5);
@@ -219,8 +220,6 @@ nav_options = [t["nav_welcome"], t["nav_dashboard"]]
 
 # Check if current st.session_state.page is a valid option in current language, if not reset to welcome
 if st.session_state.page not in nav_options:
-    # Si cambió el idioma, el string anterior no estará en nav_options. Rescatamos el índice lógicamente:
-    # Asumimos que si estaba en Dashboard, el string contenía "Dashboard"
     if "Dashboard" in st.session_state.page:
         st.session_state.page = t["nav_dashboard"]
     else:
@@ -229,41 +228,16 @@ if st.session_state.page not in nav_options:
 st.session_state.page = st.sidebar.radio("Navegación", nav_options, index=nav_options.index(st.session_state.page))
 is_dashboard = st.session_state.page == t["nav_dashboard"]
 
-# Filters only applied if in Dashboard
+# Download Data Button (Sidebar)
 df_filtered = df_master.copy()
-
-if is_dashboard:
-    st.sidebar.markdown("---")
-    st.sidebar.subheader(t["global_filters"])
-
-    # Year Filters
-    min_year = int(df_master['year'].min())
-    max_year = int(df_master['year'].max())
-    selected_years = st.sidebar.slider(t["year_range"], min_year, max_year, (min_year, max_year))
-
-    all_regions = sorted(df_master['region'].dropna().unique())
-    selected_regions = st.sidebar.multiselect(t["region_filter"], all_regions, default=all_regions)
-
-    all_categories = sorted(df_master['category'].dropna().unique())
-    selected_categories = st.sidebar.multiselect(t["category_filter"], all_categories, default=all_categories)
-
-    # Apply Filters
-    df_filtered = df_master[
-        (df_master['year'] >= selected_years[0]) & 
-        (df_master['year'] <= selected_years[1]) &
-        (df_master['region'].isin(selected_regions)) &
-        (df_master['category'].isin(selected_categories))
-    ]
-
-    # Download Data Button
-    csv = df_filtered.to_csv(index=False).encode('utf-8')
-    st.sidebar.markdown("---")
-    st.sidebar.download_button(
-       label=t["download_data"],
-       data=csv,
-       file_name='retail_data_filtered.csv',
-       mime='text/csv',
-    )
+csv = df_filtered.to_csv(index=False).encode('utf-8')
+st.sidebar.markdown("---")
+st.sidebar.download_button(
+   label=t["download_data"],
+   data=csv,
+   file_name='retail_data_filtered.csv',
+   mime='text/csv',
+)
 
 
 st.sidebar.markdown("---")
@@ -316,6 +290,28 @@ elif st.session_state.page == t["nav_dashboard"]:
     st.title("📊 Dashboard")
     st.write("")
     
+    # Global Filters (Horizontal layout top of dashboard)
+    with st.expander(f"🎛️ {t['global_filters']}", expanded=True):
+        f_col1, f_col2, f_col3 = st.columns(3)
+        with f_col1:
+            min_year = int(df_master['year'].min())
+            max_year = int(df_master['year'].max())
+            selected_years = st.slider(t["year_range"], min_year, max_year, (min_year, max_year))
+        with f_col2:
+            all_regions = sorted(df_master['region'].dropna().unique())
+            selected_regions = st.multiselect(t["region_filter"], all_regions, default=all_regions)
+        with f_col3:
+            all_categories = sorted(df_master['category'].dropna().unique())
+            selected_categories = st.multiselect(t["category_filter"], all_categories, default=all_categories)
+
+    # Apply Filters to Dashboard Data
+    df_filtered = df_master[
+        (df_master['year'] >= selected_years[0]) & 
+        (df_master['year'] <= selected_years[1]) &
+        (df_master['region'].isin(selected_regions)) &
+        (df_master['category'].isin(selected_categories))
+    ]
+    
     # KPI Cards
     col1, col2, col3, col4 = st.columns(4)
     overall_revenue = df_filtered['sales'].sum()
@@ -346,7 +342,12 @@ elif st.session_state.page == t["nav_dashboard"]:
             title=t["sales_yoy_title"], markers=True,
             color_discrete_sequence=[COLORS["PRIMARY"], "rgba(31, 38, 135, 0.4)", COLORS["ACCENT"], COLORS["WARNING"]]
         )
-        fig_yoy.update_layout(xaxis=dict(tickmode='linear', tick0=1, dtick=1), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        fig_yoy.update_layout(
+            xaxis=dict(tickmode='linear', tick0=1, dtick=1, showgrid=False), 
+            yaxis=dict(showgrid=True, zeroline=False, showticklabels=False, title=""),
+            plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(family="Inter", weight="bold")
+        )
         st.plotly_chart(fig_yoy, use_container_width=True)
         
         col1_1, col1_2 = st.columns(2)
@@ -364,7 +365,13 @@ elif st.session_state.page == t["nav_dashboard"]:
                 x=region_profit['region'], y=region_profit['sales'], marker_color=region_profit['color'],
                 text=region_profit['sales'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
             )])
-            fig_region.update_layout(title=t["sales_region_title"], plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+            fig_region.update_traces(textfont=dict(family="Inter", weight="bold", color="white"))
+            fig_region.update_layout(
+                title=t["sales_region_title"], 
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+                yaxis=dict(showgrid=False, showticklabels=False, title=""),
+                font=dict(weight="bold")
+            )
             st.plotly_chart(fig_region, use_container_width=True)
             
         with col1_2:
@@ -372,7 +379,12 @@ elif st.session_state.page == t["nav_dashboard"]:
                 df_filtered, path=['category', 'sub_category'], values='sales', title=t["sales_category_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"]]
             )
-            fig_tree.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', margin=dict(t=50, l=25, r=25, b=25))
+            fig_tree.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
+                margin=dict(t=50, l=15, r=15, b=15),
+                font=dict(family="Inter", weight="bold")
+            )
+            fig_tree.update_traces(textinfo="label+value", textfont=dict(color="white"))
             st.plotly_chart(fig_tree, use_container_width=True)
         st.info(t["sales_insight"])
 
@@ -393,7 +405,10 @@ elif st.session_state.page == t["nav_dashboard"]:
                 df_filtered, x='discount', y='profit_margin', color='category', trendline='ols', title=t["profit_scatter_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"]], opacity=0.6
             )
-            fig_scatter.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+            fig_scatter.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(weight="bold")
+            )
             st.plotly_chart(fig_scatter, use_container_width=True)
             
         subcat_profit = df_filtered.groupby('sub_category')['profit'].sum().reset_index().sort_values('profit', ascending=False)
@@ -401,9 +416,16 @@ elif st.session_state.page == t["nav_dashboard"]:
         top_bottom_df['color'] = np.where(top_bottom_df['profit'] > 0, COLORS["SUCCESS"], COLORS["DANGER"])
         
         fig_bar_profit = go.Figure(data=[go.Bar(
-            y=top_bottom_df['sub_category'], x=top_bottom_df['profit'], orientation='h', marker_color=top_bottom_df['color']
+            y=top_bottom_df['sub_category'], x=top_bottom_df['profit'], orientation='h', marker_color=top_bottom_df['color'],
+            text=top_bottom_df['profit'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
         )])
-        fig_bar_profit.update_layout(title=t["profit_bar_title"], height=600, plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="white"))
+        fig_bar_profit.update_layout(
+            title=t["profit_bar_title"], height=500, 
+            plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(showgrid=False, showticklabels=False, title=""),
+            font=dict(weight="bold")
+        )
         st.plotly_chart(fig_bar_profit, use_container_width=True)
         st.warning(t["profit_insight"])
 
@@ -439,22 +461,30 @@ elif st.session_state.page == t["nav_dashboard"]:
 
     def render_tab_conclusions(t):
         st.subheader(t["tab_conclusions"])
+        st.markdown(f"**{t['conc_arch_title']}**")
+        st.info(f"💡 {t['conc_arch_prob']}")
+        
+        col_c1, col_c2 = st.columns(2)
+        with col_c1:
+            st.markdown(f"**🛠️ {t['conc_arch_decisions'].split(':')[0]}**")
+            st.markdown(f"{t['conc_arch_decisions'].split(':')[1]}")
+        with col_c2:
+            st.markdown(f"**🚀 {t['conc_arch_scale'].split(':')[0]}**")
+            st.markdown(f"{t['conc_arch_scale'].split(':')[1]}")
+
+        st.markdown("---")
+        
         findings_table = f"""
-        | {t['conc_finding']} | {t['conc_impact']} | {t['conc_action']} | {t['conc_priority']} |
+        | 🔍 {t['conc_finding']} | 💥 {t['conc_impact']} | ✅ {t['conc_action']} | ⚠️ {t['conc_priority']} |
         |---|---|---|---|
-        | {t['conc_row1_1']} | {t['conc_row1_2']} | {t['conc_row1_3']} | {t['conc_row1_4']} |
-        | {t['conc_row2_1']} | {t['conc_row2_2']} | {t['conc_row2_3']} | {t['conc_row2_4']} |
-        | {t['conc_row3_1']} | {t['conc_row3_2']} | {t['conc_row3_3']} | {t['conc_row3_4']} |
+        | **{t['conc_row1_1']}** | {t['conc_row1_2']} | {t['conc_row1_3']} | {t['conc_row1_4']} |
+        | **{t['conc_row2_1']}** | {t['conc_row2_2']} | {t['conc_row2_3']} | {t['conc_row2_4']} |
+        | **{t['conc_row3_1']}** | {t['conc_row3_2']} | {t['conc_row3_3']} | {t['conc_row3_4']} |
         """
         st.markdown(findings_table)
+        
         st.markdown("---")
-        st.subheader(t["conc_arch_title"])
-        st.markdown(t["conc_arch_prob"])
-        st.markdown(t["conc_arch_decisions"])
-        st.markdown(t["conc_arch_scale"])
-        st.markdown("---")
-        st.subheader(t["conc_about_title"])
-        st.markdown(t["conc_about_desc"])
+        st.caption(t["conc_about_desc"])
 
     # Tabs Array
     tab1, tab2, tab3, tab4 = st.tabs([t["tab_sales"], t["tab_profit"], t["tab_ops"], t["tab_conclusions"]])
