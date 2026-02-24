@@ -45,7 +45,7 @@ def apply_custom_css():
         }}
         
         /* Liquid Glass Containers for Metrics and general containers */
-        [data-testid="stMetric"], [data-testid="stPlotlyChart"], .st-emotion-cache-12oz5g7, .st-emotion-cache-1r6slb0, .css-1r6slb0 {{
+        [data-testid="stMetric"], .st-emotion-cache-12oz5g7, .st-emotion-cache-1r6slb0, .css-1r6slb0 {{
             background: rgba(255, 255, 255, 0.75) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
@@ -55,6 +55,18 @@ def apply_custom_css():
             padding: 1.5rem !important;
             transition: all 0.3s ease;
             box-sizing: border-box !important;
+        }}
+        
+        [data-testid="stPlotlyChart"] {{
+            background: rgba(255, 255, 255, 0.75) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07) !important;
+            padding: 0 !important; /* NO PADDING to avoid internal scrollbars */
+            box-sizing: border-box !important;
+            overflow: hidden !important;
         }}
         
         [data-testid="stPlotlyChart"] iframe {{
@@ -263,31 +275,31 @@ if st.session_state.page == t["nav_welcome"]:
     # to prevent Streamlit from wrapping inner elements as markdown code blocks.
     st.markdown(f"""
 <div class="welcome-card" style="margin: 0; padding: 2.5rem;">
-    <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center; color: #0f172a; font-family: 'Inter', sans-serif;">{t["hero_title"]}</h1>
-    <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500; font-family: 'Inter', sans-serif;">
-        <em>{t['welcome_title']}</em>
-    </p>
-    <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_1']}</p>
-    <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
-    
-    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_1_title']}</h4>
-        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_1_desc']}</p>
-    </div>
-    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_2_title']}</h4>
-        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_2_desc']}</p>
-    </div>
-    <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
-        <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_3_title']}</h4>
-        <p style="margin:0; color: #1e293b;">{t['welcome_pillar_3_desc']}</p>
-    </div>
-    
-    <div style="text-align: center; margin-top: 2rem; font-family: 'Inter', sans-serif;">
-        <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
-            {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
-        </p>
-    </div>
+<h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center; color: #0f172a; font-family: 'Inter', sans-serif;">{t["hero_title"]}</h1>
+<p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500; font-family: 'Inter', sans-serif;">
+<em>{t['welcome_title']}</em>
+</p>
+<p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_1']}</p>
+<p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
+
+<div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+<h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_1_title']}</h4>
+<p style="margin:0; color: #1e293b;">{t['welcome_pillar_1_desc']}</p>
+</div>
+<div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+<h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_2_title']}</h4>
+<p style="margin:0; color: #1e293b;">{t['welcome_pillar_2_desc']}</p>
+</div>
+<div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+<h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_3_title']}</h4>
+<p style="margin:0; color: #1e293b;">{t['welcome_pillar_3_desc']}</p>
+</div>
+
+<div style="text-align: center; margin-top: 2rem; font-family: 'Inter', sans-serif;">
+<p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
+{t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+</p>
+</div>
 </div>
 """, unsafe_allow_html=True)
     
@@ -351,7 +363,9 @@ elif st.session_state.page == t["nav_dashboard"]:
             xaxis=dict(tickmode='linear', tick0=1, dtick=1, showgrid=False), 
             yaxis=dict(showgrid=True, zeroline=False, showticklabels=False, title=""),
             plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Inter", weight="bold")
+            font=dict(family="Inter", weight="bold"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
+            margin=dict(t=60, b=40, l=40, r=40)
         )
         st.plotly_chart(fig_yoy, use_container_width=True)
         
@@ -376,7 +390,7 @@ elif st.session_state.page == t["nav_dashboard"]:
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
                 yaxis=dict(showgrid=False, showticklabels=False, title=""),
                 font=dict(weight="bold"),
-                margin=dict(t=60) # Prevent title cutoff
+                margin=dict(t=60, b=40, l=40, r=40)
             )
             st.plotly_chart(fig_region, use_container_width=True)
             
@@ -387,7 +401,7 @@ elif st.session_state.page == t["nav_dashboard"]:
             )
             fig_tree.update_layout(
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
-                margin=dict(t=60, l=15, r=15, b=15),
+                margin=dict(t=60, l=20, r=20, b=20),
                 font=dict(family="Inter", weight="bold")
             )
             fig_tree.update_traces(textinfo="label+value", textfont=dict(color="black", weight="bold"))
@@ -403,7 +417,10 @@ elif st.session_state.page == t["nav_dashboard"]:
                 heat_df, text_auto=".1f", aspect="auto", title=t["profit_heatmap_title"],
                 color_continuous_scale=[COLORS["DANGER"], COLORS["WARNING"], COLORS["SUCCESS"]]
             )
-            fig_heat.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+            fig_heat.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=60, l=40, r=40, b=40)
+            )
             st.plotly_chart(fig_heat, use_container_width=True)
             
         with col2_2:
@@ -413,7 +430,9 @@ elif st.session_state.page == t["nav_dashboard"]:
             )
             fig_scatter.update_layout(
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
-                font=dict(weight="bold")
+                font=dict(weight="bold"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
+                margin=dict(t=60, l=40, r=40, b=40)
             )
             st.plotly_chart(fig_scatter, use_container_width=True)
             
@@ -425,13 +444,13 @@ elif st.session_state.page == t["nav_dashboard"]:
             y=top_bottom_df['sub_category'], x=top_bottom_df['profit'], orientation='h', marker_color=top_bottom_df['color'],
             text=top_bottom_df['profit'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
         )])
-        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside")
+        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside", cliponaxis=False)
         fig_bar_profit.update_layout(
             title=t["profit_bar_title"], height=500, 
             plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(showgrid=False, showticklabels=False, title=""),
             font=dict(weight="bold"),
-            margin=dict(t=60)
+            margin=dict(t=60, l=40, r=80, b=40)
         )
         st.plotly_chart(fig_bar_profit, use_container_width=True)
         st.warning(t["profit_insight"])
@@ -444,7 +463,10 @@ elif st.session_state.page == t["nav_dashboard"]:
                 df_filtered, x='ship_mode', y='days_to_ship', color='ship_mode', title=t["ops_box_title"],
                 color_discrete_sequence=[COLORS["PRIMARY"], COLORS["SECONDARY"], COLORS["ACCENT"], COLORS["WARNING"]]
             )
-            fig_box.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+            fig_box.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=60, l=40, r=40, b=40)
+            )
             st.plotly_chart(fig_box, use_container_width=True)
             
         with col3_2:
@@ -455,14 +477,20 @@ elif st.session_state.page == t["nav_dashboard"]:
                 state_sales, locations='state_code', locationmode='USA-states', color='sales', scope="usa", title=t["ops_geo_title"],
                 color_continuous_scale=[COLORS["SECONDARY"], COLORS["PRIMARY"]]
             )
-            fig_geo.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', geo=dict(bgcolor='rgba(0,0,0,0)'))
+            fig_geo.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', geo=dict(bgcolor='rgba(0,0,0,0)'),
+                margin=dict(t=60, l=10, r=10, b=10)
+            )
             st.plotly_chart(fig_geo, use_container_width=True)
             
         df_timeline = df_filtered.copy()
         df_timeline['week'] = df_timeline['order_date'].dt.to_period('W').dt.start_time
         weekly_orders = df_timeline.groupby('week')['order_id'].nunique().reset_index()
         fig_line_ops = px.line(weekly_orders, x='week', y='order_id', title=t["ops_timeline_title"], line_shape='spline', color_discrete_sequence=[COLORS["ACCENT"]])
-        fig_line_ops.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        fig_line_ops.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
+            margin=dict(t=60, l=40, r=40, b=40)
+        )
         st.plotly_chart(fig_line_ops, use_container_width=True)
         st.info(t["ops_insight"])
 
