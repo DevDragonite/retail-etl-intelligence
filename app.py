@@ -164,9 +164,11 @@ def apply_custom_css():
             margin: 2.5rem 0;
         }}
         </style>
-    """, unsafe_allow_html=True)
+    """
+    st.markdown(css, unsafe_allow_html=True)
+    return css
 
-apply_custom_css()
+custom_css = apply_custom_css()
 
 # --- LOAD DATA ---
 @st.cache_data
@@ -228,8 +230,17 @@ if st.session_state.page not in nav_options:
 st.session_state.page = st.sidebar.radio("Navegación", nav_options, index=nav_options.index(st.session_state.page))
 is_dashboard = st.session_state.page == t["nav_dashboard"]
 
-# Download Data Button (Sidebar)
+# Filters
 df_filtered = df_master.copy()
+min_year_val = int(df_master['year'].min())
+max_year_val = int(df_master['year'].max())
+selected_years = (min_year_val, max_year_val)
+
+if is_dashboard:
+    st.sidebar.markdown("---")
+    selected_years = st.sidebar.slider(t["year_range"], min_year_val, max_year_val, (min_year_val, max_year_val))
+
+# Download Data Button (Sidebar)
 csv = df_filtered.to_csv(index=False).encode('utf-8')
 st.sidebar.markdown("---")
 st.sidebar.download_button(
@@ -249,38 +260,39 @@ st.sidebar.markdown(f"*{t['developed_by']}*")
 
 if st.session_state.page == t["nav_welcome"]:
     # ---------------- STORYTELLING WELCOME SECTION ----------------
-    # Notice we replace markdown bold ** with proper HTML <strong> inside the HTML string 
-    # so Streamlit rendering doesn't choke on it.
-    st.markdown(f"""
-<div class="welcome-card">
-    <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center;">{t["hero_title"]}</h1>
-    <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500;">
-        <em>{t['welcome_title']}</em>
-    </p>
-    <p class="welcome-text">{t['welcome_story_1']}</p>
-    <p class="welcome-text">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
+    import streamlit.components.v1 as components
     
-    <div class="welcome-pillar">
-        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_1_title']}</h4>
-        <p style="margin:0;">{t['welcome_pillar_1_desc']}</p>
-    </div>
-    <div class="welcome-pillar">
-        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_2_title']}</h4>
-        <p style="margin:0;">{t['welcome_pillar_2_desc']}</p>
-    </div>
-    <div class="welcome-pillar">
-        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_3_title']}</h4>
-        <p style="margin:0;">{t['welcome_pillar_3_desc']}</p>
-    </div>
-    
-    <br>
-    <div style="text-align: center; margin-top: 1rem;">
-        <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
-            {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+    welcome_html_block = f"""
+    {custom_css}
+    <div class="welcome-card" style="margin: 0; padding: 2.5rem;">
+        <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center; color: #0f172a; font-family: 'Inter', sans-serif;">{t["hero_title"]}</h1>
+        <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500; font-family: 'Inter', sans-serif;">
+            <em>{t['welcome_title']}</em>
         </p>
+        <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_1']}</p>
+        <p class="welcome-text" style="font-family: 'Inter', sans-serif;">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
+        
+        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_1_title']}</h4>
+            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_1_desc']}</p>
+        </div>
+        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_2_title']}</h4>
+            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_2_desc']}</p>
+        </div>
+        <div class="welcome-pillar" style="font-family: 'Inter', sans-serif;">
+            <h4 style="margin-bottom: 0.5rem; color: #0f172a;">{t['welcome_pillar_3_title']}</h4>
+            <p style="margin:0; color: #1e293b;">{t['welcome_pillar_3_desc']}</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem; font-family: 'Inter', sans-serif;">
+            <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
+                {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+            </p>
+        </div>
     </div>
-</div>
-    """, unsafe_allow_html=True)
+    """
+    st.components.v1.html(welcome_html_block, height=900, scrolling=True)
     
     st.markdown("<p style='text-align: center; margin-top: 2rem;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)
 
@@ -292,15 +304,11 @@ elif st.session_state.page == t["nav_dashboard"]:
     
     # Global Filters (Horizontal layout top of dashboard)
     with st.expander(f"🎛️ {t['global_filters']}", expanded=True):
-        f_col1, f_col2, f_col3 = st.columns(3)
+        f_col1, f_col2 = st.columns(2)
         with f_col1:
-            min_year = int(df_master['year'].min())
-            max_year = int(df_master['year'].max())
-            selected_years = st.slider(t["year_range"], min_year, max_year, (min_year, max_year))
-        with f_col2:
             all_regions = sorted(df_master['region'].dropna().unique())
             selected_regions = st.multiselect(t["region_filter"], all_regions, default=all_regions)
-        with f_col3:
+        with f_col2:
             all_categories = sorted(df_master['category'].dropna().unique())
             selected_categories = st.multiselect(t["category_filter"], all_categories, default=all_categories)
 
@@ -365,12 +373,13 @@ elif st.session_state.page == t["nav_dashboard"]:
                 x=region_profit['region'], y=region_profit['sales'], marker_color=region_profit['color'],
                 text=region_profit['sales'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
             )])
-            fig_region.update_traces(textfont=dict(family="Inter", weight="bold", color="white"))
+            fig_region.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside")
             fig_region.update_layout(
                 title=t["sales_region_title"], 
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
                 yaxis=dict(showgrid=False, showticklabels=False, title=""),
-                font=dict(weight="bold")
+                font=dict(weight="bold"),
+                margin=dict(t=60) # Prevent title cutoff
             )
             st.plotly_chart(fig_region, use_container_width=True)
             
@@ -381,10 +390,10 @@ elif st.session_state.page == t["nav_dashboard"]:
             )
             fig_tree.update_layout(
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
-                margin=dict(t=50, l=15, r=15, b=15),
+                margin=dict(t=60, l=15, r=15, b=15),
                 font=dict(family="Inter", weight="bold")
             )
-            fig_tree.update_traces(textinfo="label+value", textfont=dict(color="white"))
+            fig_tree.update_traces(textinfo="label+value", textfont=dict(color="black", weight="bold"))
             st.plotly_chart(fig_tree, use_container_width=True)
         st.info(t["sales_insight"])
 
@@ -419,12 +428,13 @@ elif st.session_state.page == t["nav_dashboard"]:
             y=top_bottom_df['sub_category'], x=top_bottom_df['profit'], orientation='h', marker_color=top_bottom_df['color'],
             text=top_bottom_df['profit'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
         )])
-        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="white"))
+        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside")
         fig_bar_profit.update_layout(
             title=t["profit_bar_title"], height=500, 
             plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(showgrid=False, showticklabels=False, title=""),
-            font=dict(weight="bold")
+            font=dict(weight="bold"),
+            margin=dict(t=60)
         )
         st.plotly_chart(fig_bar_profit, use_container_width=True)
         st.warning(t["profit_insight"])

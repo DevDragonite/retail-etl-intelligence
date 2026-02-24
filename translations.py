@@ -38,19 +38,19 @@ LANGS = {
         "sales_yoy_title": "Ventas Mes a Mes (YoY)",
         "sales_region_title": "Rentabilidad por Región",
         "sales_category_title": "Ventas por Categoría y Sub-categoría",
-        "sales_insight": "💡 Insight: Las ventas muestran un pico consistente en el Q4 de todos los años, impulsadas por las categorías de Tecnología y Mobiliario.",
+        "sales_insight": "💡 **La Historia de las Ventas:** A lo largo de los años, observamos un patrón innegable: los consumidores esperan hasta el Q4 para las mayores inversiones, impulsados por los Black Fridays navideños. Categorías pesadas como *Tecnología* y *Mobiliario* son los héroes indiscutibles. **Recomendación:** Aumentar inventario tecnológico un mes antes del Q4.",
         
         # Tab 2
         "profit_heatmap_title": "Margen de Beneficio: Categoría vs Trimestre",
         "profit_scatter_title": "Descuento vs Margen de Beneficio",
         "profit_bar_title": "Top 10 Sub-categorías: Más y Menos Rentables",
-        "profit_insight": "💡 Insight: Las sub-categorías con descuentos > 40% generan pérdidas consistentes. Recomendación: revisar política de descuentos en Tables y Bookcases.",
+        "profit_insight": "💡 **Alerta de Rentabilidad:** La fiebre de los decuentos está desangrando áreas críticas. Al analizar en detalle, descubrimos que otorgar descuentos superiores al 40% en *Mesas* y *Libreros* no impulsa retención real, sino que garantiza pérdidas sistemáticas. **Recomendación:** Limitar el techo de descuento de mobiliario a 20%.",
         
         # Tab 3
         "ops_box_title": "Días de Envío por Modo",
         "ops_geo_title": "Ingresos Totales por Estado",
         "ops_timeline_title": "Volumen de Órdenes Semanal",
-        "ops_insight": "💡 Insight: El método Standard Class promedia 5 días, creando posibles cuellos de botella geográficos en estados con alta demanda.",
+        "ops_insight": "💡 **El Termómetro Operativo:** Promediar 5 días en envíos de clase estándar parece razonable desde la logística general; sin embargo, en regiones de máxima demanda como las costas (California y N. York), este tiempo de espera mina la lealtad del cliente B2B. **Recomendación:** Considerar *Micro-hubs* de despacho para atenuar los tiempos pico.",
         
         # Tab 4
         "conclusions_title": "Resumen Ejecutivo",
@@ -114,19 +114,19 @@ LANGS = {
         "sales_yoy_title": "Month-over-Month Sales (YoY)",
         "sales_region_title": "Profitability by Region",
         "sales_category_title": "Sales by Category & Sub-category",
-        "sales_insight": "💡 Insight: Sales show a consistent peak in Q4 across all years, driven by the Technology and Furniture categories.",
+        "sales_insight": "💡 **The Story of Sales:** Over the years, we've observed an undeniable pattern: consumers wait until Q4 for major investments, driven by holiday Black Fridays. Heavyweight categories like *Technology* and *Furniture* are the undisputed heroes. **Recommendation:** Increase technology inventory one month prior to Q4.",
         
         # Tab 2
         "profit_heatmap_title": "Profit Margin: Category vs Quarter",
         "profit_scatter_title": "Discount vs Profit Margin",
         "profit_bar_title": "Top 10 Sub-categories: Most & Least Profitable",
-        "profit_insight": "💡 Insight: Sub-categories with discounts > 40% consistently generate losses. Recommendation: review discount policy on Tables and Bookcases.",
+        "profit_insight": "💡 **Profitability Alert:** The discount fever is bleeding critical areas. Upon closer look, we discovered that granting discounts over 40% on *Tables* and *Bookcases* doesn't drive true retention; it guarantees systematic losses. **Recommendation:** Cap furniture discounts at a strict 20%.",
         
         # Tab 3
         "ops_box_title": "Shipping Days by Mode",
         "ops_geo_title": "Total Revenue by State",
         "ops_timeline_title": "Weekly Order Volume",
-        "ops_insight": "💡 Insight: Standard Class shipping averages 5 days, potentially creating geographical bottlenecks in high-demand states.",
+        "ops_insight": "💡 **The Operational Thermometer:** Averaging 5 days for standard shipping seems reasonable from a general logistics standpoint; however, in high-demand coastal regions (California & NY), this wait time undermines B2B customer loyalty. **Recommendation:** Consider *Micro-hubs* to mitigate peak delivery times.",
         
         # Tab 4
         "conclusions_title": "Executive Summary",
@@ -190,19 +190,19 @@ LANGS = {
         "sales_yoy_title": "Vendas Mês a Mês (YoY)",
         "sales_region_title": "Lucratividade por Região",
         "sales_category_title": "Vendas por Categoria e Subcategoria",
-        "sales_insight": "💡 Insight: As vendas mostram um pico consistente no quarto trimestre em todos os anos, impulsionadas pelas categorias Tecnologia e Móveis.",
+        "sales_insight": "💡 **A História das Vendas:** Ao longo dos anos, observamos um padrão inegável: os consumidores aguardam até o Q4 para os maiores investimentos, impulsionados pelos Black Fridays de fim de ano. Categorias de peso como *Tecnologia* e *Móveis* são as grandes heroínas. **Recomendação:** Aumentar o estoque de tecnologia um mês antes do Q4.",
         
         # Tab 2
         "profit_heatmap_title": "Margem de Lucro: Categoria vs Trimestre",
         "profit_scatter_title": "Desconto vs Margem de Lucro",
         "profit_bar_title": "Top 10 Subcategorias: Mais e Menos Lucrativas",
-        "profit_insight": "💡 Insight: Subcategorias com descontos > 40% geram perdas consistentemente. Recomendação: revisar apolítica de descontos em Tables e Bookcases.",
+        "profit_insight": "💡 **Alerta de Lucratividade:** A febre dos descontos está sangrando áreas críticas. Ao analisar de perto, descobrimos que conceder descontos superiores a 40% em *Mesas* e *Estantes* não gera retenção real, mas garante perdas sistemáticas. **Recomendação:** Limitar o teto de desconto de móveis a 20%.",
         
         # Tab 3
         "ops_box_title": "Dias de Envio por Modo",
         "ops_geo_title": "Receita Total por Estado",
         "ops_timeline_title": "Volume de Pedidos Semanal",
-        "ops_insight": "💡 Insight: O envio Standard Class tem média de 5 dias, potencialmente criando gargalos geográficos em estados de alta demanda.",
+        "ops_insight": "💡 **O Termômetro Operacional:** Ter uma média de 5 dias em envios de classe padrão parece razoável em termos gerais; no entanto, em regiões de alta demanda nas costas (Califórnia e NY), esse tempo de espera mina a lealdade do cliente B2B. **Recomendação:** Considerar *Micro-hubs* de despacho para atenuar tempos de pico.",
         
         # Tab 4
         "conclusions_title": "Resumo Executivo",
