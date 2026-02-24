@@ -229,7 +229,18 @@ with col_lang:
     active_lang = st.session_state.lang
     other_langs = [l for l in LANGS.keys() if l != active_lang]
     
-    # CSS injection for natively unsupported images in Streamlit buttons (overcoming Windows lack of flag emojis)
+    # Iterate over the non-active languages and inject dynamic CSS for each specific position
+    inner_css = ""
+    for idx, lang_opt in enumerate(other_langs, start=1):
+        inner_css += f"""
+        div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type({idx}) button p::before {{
+            content: ""; display: inline-block; width: 18px; height: 13px;
+            background-image: url('{flag_urls[lang_opt]}'); background-size: cover; 
+            margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }}
+        """
+        
+    # CSS injection for natively unsupported images in Streamlit buttons
     css_flags = f"""
     <style>
     /* Main popover button flag */
@@ -238,18 +249,7 @@ with col_lang:
         background-image: url('{flag_urls[active_lang]}'); background-size: cover; 
         margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }}
-    
-    /* Inner buttons */
-    div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type(1) button p::before {{
-        content: ""; display: inline-block; width: 18px; height: 13px;
-        background-image: url('{flag_urls[other_langs[0]]}'); background-size: cover; 
-        margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }}
-    div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type(2) button p::before {{
-        content: ""; display: inline-block; width: 18px; height: 13px;
-        background-image: url('{flag_urls[other_langs[1]]}'); background-size: cover; 
-        margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }}
+    {inner_css}
     </style>
     """
     st.markdown(css_flags, unsafe_allow_html=True)
