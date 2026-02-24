@@ -83,7 +83,7 @@ def apply_custom_css():
         
         /* Metric Typography */
         [data-testid="stMetricValue"] {{
-            font-size: 2.4rem !important;
+            font-size: 2.0rem !important; /* Reduced to avoid text cutoff at 100% zoom */
             font-weight: 800 !important;
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             -webkit-background-clip: text;
@@ -215,11 +215,12 @@ us_state_to_abbrev = {
 # --- HEADER & LANGUAGE HAMBURGER MENU ---
 col_logo, col_space, col_lang = st.columns([1, 6, 1])
 with col_lang:
-    with st.popover("🌐 Idioma"):
+    with st.popover(f"🌐 {st.session_state.lang}"):
         for lang_option in LANGS.keys():
-            if st.button(lang_option, use_container_width=True):
-                st.session_state.lang = lang_option
-                st.rerun()
+            if lang_option != st.session_state.lang:
+                if st.button(lang_option, use_container_width=True):
+                    st.session_state.lang = lang_option
+                    st.rerun()
 
 t = LANGS[st.session_state.lang]
 
@@ -444,15 +445,15 @@ elif st.session_state.page == t["nav_dashboard"]:
             y=top_bottom_df['sub_category'], x=top_bottom_df['profit'], orientation='h', marker_color=top_bottom_df['color'],
             text=top_bottom_df['profit'].apply(lambda x: f"${x:,.0f}"), textposition='auto'
         )])
-        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="black"), textposition="outside", cliponaxis=False)
+        fig_bar_profit.update_traces(textfont=dict(family="Inter", weight="bold", color="black", size=11), textposition="auto", cliponaxis=False)
         fig_bar_profit.update_layout(
             title=t["profit_bar_title"], height=500, 
             plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(showgrid=False, showticklabels=False, title=""),
             font=dict(weight="bold"),
-            margin=dict(t=60, l=40, r=80, b=40)
+            margin=dict(t=60, l=100, r=80, b=40)
         )
-        st.plotly_chart(fig_bar_profit, use_container_width=True)
+        st.plotly_chart(fig_bar_profit, use_container_width=True, config={'displayModeBar': False})
         st.warning(t["profit_insight"])
 
     def render_tab_ops(df_filtered, t):
@@ -478,10 +479,12 @@ elif st.session_state.page == t["nav_dashboard"]:
                 color_continuous_scale=[COLORS["SECONDARY"], COLORS["PRIMARY"]]
             )
             fig_geo.update_layout(
-                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', geo=dict(bgcolor='rgba(0,0,0,0)'),
-                margin=dict(t=60, l=10, r=10, b=10)
+                plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
+                geo=dict(bgcolor='rgba(0,0,0,0)', fixedrange=True),
+                margin=dict(t=60, l=10, r=10, b=10),
+                dragmode=False
             )
-            st.plotly_chart(fig_geo, use_container_width=True)
+            st.plotly_chart(fig_geo, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': False})
             
         df_timeline = df_filtered.copy()
         df_timeline['week'] = df_timeline['order_date'].dt.to_period('W').dt.start_time
@@ -495,31 +498,26 @@ elif st.session_state.page == t["nav_dashboard"]:
         st.info(t["ops_insight"])
 
     def render_tab_conclusions(t):
-        st.subheader(t["tab_conclusions"])
-        st.markdown(f"**{t['conc_arch_title']}**")
-        st.info(f"💡 {t['conc_arch_prob']}")
+        st.subheader(t["conclusions_title"])
         
-        col_c1, col_c2 = st.columns(2)
-        with col_c1:
-            st.markdown(f"**🛠️ {t['conc_arch_decisions'].split(':')[0]}**")
-            st.markdown(f"{t['conc_arch_decisions'].split(':')[1]}")
-        with col_c2:
-            st.markdown(f"**🚀 {t['conc_arch_scale'].split(':')[0]}**")
-            st.markdown(f"{t['conc_arch_scale'].split(':')[1]}")
-
-        st.markdown("---")
+        labels = {
+            "Español": ["🔍 Hallazgo", "💥 Impacto", "✅ Acción Recomendada", "📈 Predicción"],
+            "English": ["🔍 Finding", "💥 Impact", "✅ Recommended Action", "📈 Prediction"],
+            "Português": ["🔍 Descoberta", "💥 Impacto", "✅ Ação Recomendada", "📈 Previsão"]
+        }
+        L = labels.get(st.session_state.lang, labels["Español"])
         
-        findings_table = f"""
-        | 🔍 {t['conc_finding']} | 💥 {t['conc_impact']} | ✅ {t['conc_action']} | ⚠️ {t['conc_priority']} |
-        |---|---|---|---|
-        | **{t['conc_row1_1']}** | {t['conc_row1_2']} | {t['conc_row1_3']} | {t['conc_row1_4']} |
-        | **{t['conc_row2_1']}** | {t['conc_row2_2']} | {t['conc_row2_3']} | {t['conc_row2_4']} |
-        | **{t['conc_row3_1']}** | {t['conc_row3_2']} | {t['conc_row3_3']} | {t['conc_row3_4']} |
-        """
-        st.markdown(findings_table)
-        
-        st.markdown("---")
-        st.caption(t["conc_about_desc"])
+        def render_finding(title_key, finding_key, impact_key, action_key, pred_key):
+            st.markdown(f"#### {t[title_key]}")
+            st.markdown(f"**{L[0]}:** {t[finding_key]}")
+            st.markdown(f"**{L[1]}:** {t[impact_key]}")
+            st.markdown(f"**{L[2]}:** {t[action_key]}")
+            st.success(f"**{L[3]}:** {t[pred_key]}")
+            st.markdown("---")
+            
+        render_finding('conc_f1_title', 'conc_f1_finding', 'conc_f1_impact', 'conc_f1_action', 'conc_f1_prediction')
+        render_finding('conc_f2_title', 'conc_f2_finding', 'conc_f2_impact', 'conc_f2_action', 'conc_f2_prediction')
+        render_finding('conc_f3_title', 'conc_f3_finding', 'conc_f3_impact', 'conc_f3_action', 'conc_f3_prediction')
 
     # Tabs Array
     tab1, tab2, tab3, tab4 = st.tabs([t["tab_sales"], t["tab_profit"], t["tab_ops"], t["tab_conclusions"]])
