@@ -116,8 +116,8 @@ def apply_custom_css():
             background: rgba(226, 232, 240, 0.6); /* Darker background to look like a button */
             border-radius: 12px;
             padding: 8px 12px;
-            font-weight: 600;
-            color: #475569; /* Slightly darker text for contrast */
+            font-weight: 800 !important; /* Bolded as requested */
+            color: #1e293b !important; /* Darker base text keeping visibility */
             border: 1px solid rgba(203, 213, 225, 0.5) !important;
             transition: all 0.2s ease;
             white-space: nowrap;
@@ -233,19 +233,19 @@ with col_lang:
     css_flags = f"""
     <style>
     /* Main popover button flag */
-    div[data-testid="column"]:nth-of-type(3) [data-testid="stPopover"] > div > button p::before {{
+    div[data-testid="stPopover"] > div > button p::before {{
         content: ""; display: inline-block; width: 18px; height: 13px;
         background-image: url('{flag_urls[active_lang]}'); background-size: cover; 
         margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }}
     
     /* Inner buttons */
-    div[data-testid="stPopoverBody"] div.stButton:nth-of-type(1) button p::before {{
+    div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type(1) button p::before {{
         content: ""; display: inline-block; width: 18px; height: 13px;
         background-image: url('{flag_urls[other_langs[0]]}'); background-size: cover; 
         margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }}
-    div[data-testid="stPopoverBody"] div.stButton:nth-of-type(2) button p::before {{
+    div[data-testid="stPopoverBody"] [data-testid="stButton"]:nth-of-type(2) button p::before {{
         content: ""; display: inline-block; width: 18px; height: 13px;
         background-image: url('{flag_urls[other_langs[1]]}'); background-size: cover; 
         margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -353,12 +353,24 @@ elif st.session_state.page == t["nav_dashboard"]:
     # Global Filters (Horizontal layout top of dashboard)
     with st.expander(f"🎛️ {t['global_filters']}", expanded=True):
         f_col1, f_col2 = st.columns(2)
+        
+        # Translation format functions for filters
+        def tf_region(r):
+            if st.session_state.lang == "Español": return {"Central": "Centro", "East": "Este", "South": "Sur", "West": "Oeste"}.get(r, r)
+            if st.session_state.lang == "Português": return {"Central": "Centro", "East": "Leste", "South": "Sul", "West": "Oeste"}.get(r, r)
+            return r
+
+        def tf_category(c):
+            if st.session_state.lang == "Español": return {"Furniture": "Mobiliario", "Office Supplies": "Material de Oficina", "Technology": "Tecnología"}.get(c, c)
+            if st.session_state.lang == "Português": return {"Furniture": "Móveis", "Office Supplies": "Material de Escritório", "Technology": "Tecnologia"}.get(c, c)
+            return c
+
         with f_col1:
             all_regions = sorted(df_master['region'].dropna().unique())
-            selected_regions = st.multiselect(t["region_filter"], all_regions, default=all_regions)
+            selected_regions = st.multiselect(t["region_filter"], all_regions, default=all_regions, format_func=tf_region)
         with f_col2:
             all_categories = sorted(df_master['category'].dropna().unique())
-            selected_categories = st.multiselect(t["category_filter"], all_categories, default=all_categories)
+            selected_categories = st.multiselect(t["category_filter"], all_categories, default=all_categories, format_func=tf_category)
 
     # Apply Filters to Dashboard Data
     df_filtered = df_master[
