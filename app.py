@@ -220,22 +220,45 @@ us_state_to_abbrev = {
 # --- HEADER & LANGUAGE HAMBURGER MENU ---
 col_logo, col_space, col_lang = st.columns([1, 6, 1])
 with col_lang:
-    # Use SVG images for flags instead of emojis, to fix Windows rendering ("VE" text bug)
-    flags_md = {
-        "Español": "<img src='https://flagcdn.com/20x15/ve.png' width='20' style='margin-right: 5px; vertical-align: middle;'>", 
-        "English": "<img src='https://flagcdn.com/20x15/us.png' width='20' style='margin-right: 5px; vertical-align: middle;'>", 
-        "Português": "<img src='https://flagcdn.com/20x15/br.png' width='20' style='margin-right: 5px; vertical-align: middle;'>"
+    flag_urls = {
+        "Español": "https://flagcdn.com/w20/ve.png",
+        "English": "https://flagcdn.com/w20/us.png",
+        "Português": "https://flagcdn.com/w20/br.png"
     }
     
-    current_flag_md = flags_md.get(st.session_state.lang, "")
-    st.markdown(f"<div style='text-align: right; margin-bottom: 5px;'><strong>{current_flag_md} {st.session_state.lang}</strong></div>", unsafe_allow_html=True)
+    active_lang = st.session_state.lang
+    other_langs = [l for l in LANGS.keys() if l != active_lang]
     
-    with st.popover("🌐 Cambiar Idioma"):
-        for lang_option in LANGS.keys():
-            if lang_option != st.session_state.lang:
-                if st.button(lang_option, use_container_width=True, key=f"btn_{lang_option}"):
-                    st.session_state.lang = lang_option
-                    st.rerun()
+    # CSS injection for natively unsupported images in Streamlit buttons (overcoming Windows lack of flag emojis)
+    css_flags = f"""
+    <style>
+    /* Main popover button flag */
+    div[data-testid="column"]:nth-of-type(3) [data-testid="stPopover"] > div > button p::before {{
+        content: ""; display: inline-block; width: 18px; height: 13px;
+        background-image: url('{flag_urls[active_lang]}'); background-size: cover; 
+        margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }}
+    
+    /* Inner buttons */
+    div[data-testid="stPopoverBody"] div.stButton:nth-of-type(1) button p::before {{
+        content: ""; display: inline-block; width: 18px; height: 13px;
+        background-image: url('{flag_urls[other_langs[0]]}'); background-size: cover; 
+        margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }}
+    div[data-testid="stPopoverBody"] div.stButton:nth-of-type(2) button p::before {{
+        content: ""; display: inline-block; width: 18px; height: 13px;
+        background-image: url('{flag_urls[other_langs[1]]}'); background-size: cover; 
+        margin-right: 8px; vertical-align: middle; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }}
+    </style>
+    """
+    st.markdown(css_flags, unsafe_allow_html=True)
+    
+    with st.popover(active_lang):
+        for lang_option in other_langs:
+            if st.button(lang_option, use_container_width=True, key=f"btn_{lang_option}"):
+                st.session_state.lang = lang_option
+                st.rerun()
 
 t = LANGS[st.session_state.lang]
 
