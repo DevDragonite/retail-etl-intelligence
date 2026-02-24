@@ -97,8 +97,9 @@ def apply_custom_css():
             letter-spacing: 0.05em;
         }}
         
-        /* Tabs styling - Pill shape */
+        /* Tabs styling - Pill shape full width */
         .stTabs [data-baseweb="tab-list"] {{
+            display: flex;
             gap: 10px;
             background: rgba(255, 255, 255, 0.4);
             padding: 6px;
@@ -106,16 +107,20 @@ def apply_custom_css():
             border: 1px solid rgba(255, 255, 255, 0.6);
             margin-bottom: 1.5rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            width: 100%;
         }}
         .stTabs [data-baseweb="tab"] {{
+            flex: 1; /* Distribute evenly */
+            justify-content: center;
             height: 42px;
-            background: transparent;
+            background: rgba(226, 232, 240, 0.6); /* Darker background to look like a button */
             border-radius: 12px;
-            padding: 8px 24px;
+            padding: 8px 12px;
             font-weight: 600;
-            color: #64748b;
-            border: none !important;
+            color: #475569; /* Slightly darker text for contrast */
+            border: 1px solid rgba(203, 213, 225, 0.5) !important;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }}
         .stTabs [aria-selected="true"] {{
             background: rgba(255, 255, 255, 1) !important;
@@ -215,13 +220,20 @@ us_state_to_abbrev = {
 # --- HEADER & LANGUAGE HAMBURGER MENU ---
 col_logo, col_space, col_lang = st.columns([1, 6, 1])
 with col_lang:
-    flags = {"Español": "🇻🇪", "English": "🇺🇸", "Português": "🇧🇷"}
-    current_flag = flags.get(st.session_state.lang, "🌐")
-    with st.popover(f"{current_flag} {st.session_state.lang}"):
+    # Use SVG images for flags instead of emojis, to fix Windows rendering ("VE" text bug)
+    flags_md = {
+        "Español": "<img src='https://flagcdn.com/20x15/ve.png' width='20' style='margin-right: 5px; vertical-align: middle;'>", 
+        "English": "<img src='https://flagcdn.com/20x15/us.png' width='20' style='margin-right: 5px; vertical-align: middle;'>", 
+        "Português": "<img src='https://flagcdn.com/20x15/br.png' width='20' style='margin-right: 5px; vertical-align: middle;'>"
+    }
+    
+    current_flag_md = flags_md.get(st.session_state.lang, "")
+    st.markdown(f"<div style='text-align: right; margin-bottom: 5px;'><strong>{current_flag_md} {st.session_state.lang}</strong></div>", unsafe_allow_html=True)
+    
+    with st.popover("🌐 Cambiar Idioma"):
         for lang_option in LANGS.keys():
             if lang_option != st.session_state.lang:
-                opt_flag = flags.get(lang_option, "🌐")
-                if st.button(f"{opt_flag} {lang_option}", use_container_width=True):
+                if st.button(lang_option, use_container_width=True, key=f"btn_{lang_option}"):
                     st.session_state.lang = lang_option
                     st.rerun()
 
