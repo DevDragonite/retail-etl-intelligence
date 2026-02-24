@@ -23,7 +23,7 @@ if "page" not in st.session_state:
 
 # --- CSS STYLING (PREMIUM LIQUID GLASS) ---
 def apply_custom_css():
-    st.markdown(f"""
+    css = f"""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
