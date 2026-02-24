@@ -480,7 +480,7 @@ elif st.session_state.page == t["nav_dashboard"]:
             )
             fig_geo.update_layout(
                 plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
-                geo=dict(bgcolor='rgba(0,0,0,0)', fixedrange=True),
+                geo=dict(bgcolor='rgba(0,0,0,0)'),
                 margin=dict(t=60, l=10, r=10, b=10),
                 dragmode=False
             )
