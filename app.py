@@ -16,7 +16,7 @@ st.set_page_config(
 
 # --- INITIALIZE SESSION STATE ---
 if "lang" not in st.session_state:
-    st.session_state.lang = "🇪🇸 Español"
+    st.session_state.lang = "Español"
 
 if "page" not in st.session_state:
     st.session_state.page = "Bienvenida"
@@ -45,7 +45,7 @@ def apply_custom_css():
         }}
         
         /* Liquid Glass Containers for Metrics and general containers */
-        [data-testid="stMetric"], .st-emotion-cache-12oz5g7, .st-emotion-cache-1r6slb0, .css-1r6slb0 {{
+        [data-testid="stMetric"], [data-testid="stPlotlyChart"], .st-emotion-cache-12oz5g7, .st-emotion-cache-1r6slb0, .css-1r6slb0 {{
             background: rgba(255, 255, 255, 0.75) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
@@ -270,34 +270,34 @@ if st.session_state.page == t["nav_welcome"]:
     # Notice we replace markdown bold ** with proper HTML <strong> inside the HTML string 
     # so Streamlit rendering doesn't choke on it.
     st.markdown(f"""
-    <div class="welcome-card">
-        <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center;">{t["hero_title"]}</h1>
-        <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500;">
-            <em>{t['welcome_title']}</em>
-        </p>
-        <p class="welcome-text">{t['welcome_story_1']}</p>
-        <p class="welcome-text">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
-        
-        <div class="welcome-pillar">
-            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_1_title']}</h4>
-            <p style="margin:0;">{t['welcome_pillar_1_desc']}</p>
-        </div>
-        <div class="welcome-pillar">
-            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_2_title']}</h4>
-            <p style="margin:0;">{t['welcome_pillar_2_desc']}</p>
-        </div>
-        <div class="welcome-pillar">
-            <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_3_title']}</h4>
-            <p style="margin:0;">{t['welcome_pillar_3_desc']}</p>
-        </div>
-        
-        <br>
-        <div style="text-align: center; margin-top: 1rem;">
-            <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
-                {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
-            </p>
-        </div>
+<div class="welcome-card">
+    <h1 style="font-size: 3.2rem; margin-bottom: 0.8rem; text-align: center;">{t["hero_title"]}</h1>
+    <p style="text-align: center; font-size: 1.3rem; color: #64748b; margin-bottom: 2.5rem; font-weight: 500;">
+        <em>{t['welcome_title']}</em>
+    </p>
+    <p class="welcome-text">{t['welcome_story_1']}</p>
+    <p class="welcome-text">{t['welcome_story_2'].replace('**', '<strong>').replace('**', '</strong>')}</p>
+    
+    <div class="welcome-pillar">
+        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_1_title']}</h4>
+        <p style="margin:0;">{t['welcome_pillar_1_desc']}</p>
     </div>
+    <div class="welcome-pillar">
+        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_2_title']}</h4>
+        <p style="margin:0;">{t['welcome_pillar_2_desc']}</p>
+    </div>
+    <div class="welcome-pillar">
+        <h4 style="margin-bottom: 0.5rem;">{t['welcome_pillar_3_title']}</h4>
+        <p style="margin:0;">{t['welcome_pillar_3_desc']}</p>
+    </div>
+    
+    <br>
+    <div style="text-align: center; margin-top: 1rem;">
+        <p style="font-weight: 600; font-size: 1.2rem; color: #0f172a;">
+            {t['welcome_cta'].replace('**', '<strong>').replace('**', '</strong>')}
+        </p>
+    </div>
+</div>
     """, unsafe_allow_html=True)
     
     st.markdown("<p style='text-align: center; margin-top: 2rem;'><img src='https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white'> <img src='https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white'> <img src='https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white'> <img src='https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white'></p>", unsafe_allow_html=True)

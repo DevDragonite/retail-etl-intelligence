@@ -1,7 +1,7 @@
 # translations.py
 
 LANGS = {
-    "🇪🇸 Español": {
+    "Español": {
         "sidebar_title": "Retail ETL Intelligence",
         "nav_welcome": "📖 Introducción",
         "nav_dashboard": "📊 Dashboard",
@@ -77,7 +77,7 @@ LANGS = {
         "conc_about_title": "Sobre este proyecto",
         "conc_about_desc": "**Desarrollador:** Hely Camargo\n**Tech Stack:** Python, Pandas, Plotly Express, Streamlit\n**Metodologia:** Framework CRISP-DM centrado en ETL robusto + Analítica UI/UX."
     },
-    "🇬🇧 English": {
+    "English": {
         "sidebar_title": "Retail ETL Intelligence",
         "nav_welcome": "📖 Introduction",
         "nav_dashboard": "📊 Dashboard",
@@ -153,7 +153,7 @@ LANGS = {
         "conc_about_title": "About this project",
         "conc_about_desc": "**Developer:** Hely Camargo\n**Tech Stack:** Python, Pandas, Plotly Express, Streamlit\n**Methodology:** CRISP-DM framework focusing on robust ETL + UI/UX Analytics."
     },
-    "🇧🇷 Português": {
+    "Português": {
         "sidebar_title": "Inteligência de Varejo ETL",
         "nav_welcome": "📖 Introdução",
         "nav_dashboard": "📊 Dashboard",
